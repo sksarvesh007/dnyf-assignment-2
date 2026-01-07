@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: feedback-backend
+    env: python
+    buildCommand: uv sync && uv run alembic upgrade head
+    startCommand: uv run uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: DATABASE_URL
+        sync: true
+      - key: GROQ_API_KEY
+        sync: false
