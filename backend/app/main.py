@@ -5,7 +5,9 @@ from app.core.config import settings
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    openapi_url=f"/backend{settings.API_V1_STR}/openapi.json",
+    docs_url="/backend/docs",
+    redoc_url="/backend/redoc",
 )
 
 if settings.BACKEND_CORS_ORIGINS:
@@ -18,12 +20,12 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 from app.api.v1.api import api_router
-app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=f"/backend{settings.API_V1_STR}")
 
-@app.get("/")
+@app.get("/backend")
 def root():
     return {"message": "Welcome to Two-Dashboard AI Feedback API"}
 
-@app.get("/health")
+@app.get("/backend/health")
 def health_check():
     return {"status": "ok"}
