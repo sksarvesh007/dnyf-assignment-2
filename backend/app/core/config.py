@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     
     DATABASE_URL: str = "sqlite:///./sql_app.db"
     GROQ_API_KEY: Optional[str] = None
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:8000"]
+    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8000"]
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
