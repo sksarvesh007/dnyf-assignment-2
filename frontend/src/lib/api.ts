@@ -46,3 +46,15 @@ export async function getAnalytics() {
     }
     return res.json();
 }
+
+export async function checkHealth() {
+    try {
+        const res = await fetch(`${API_BASE.replace('/api/v1', '')}/health`, {
+            method: 'GET',
+            signal: AbortSignal.timeout(5000)
+        });
+        return res.ok;
+    } catch {
+        return false;
+    }
+}
