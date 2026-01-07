@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Star, Bot, Lightbulb, MessageSquare } from "lucide-react";
+import { Star, Bot, Lightbulb, MessageSquare, Trash2 } from "lucide-react";
 
 function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
     return <span className={`px-2 py-1 rounded-full text-xs font-semibold ${className}`}>{children}</span>;
@@ -15,7 +15,7 @@ interface FeedbackItem {
     created_at: string;
 }
 
-export function FeedbackCard({ item }: { item: FeedbackItem }) {
+export function FeedbackCard({ item, onDelete }: { item: FeedbackItem; onDelete?: (id: number) => void }) {
     const sentimentClass = item.sentiment === 'positive' ? 'bg-green-500/10 border-green-500/30 hover:bg-green-500/20 hover:border-green-500/50 shadow-[0_0_15px_-3px_rgba(34,197,94,0.15)]' :
         item.sentiment === 'negative' ? 'bg-red-500/10 border-red-500/30 hover:bg-red-500/20 hover:border-red-500/50 shadow-[0_0_15px_-3px_rgba(239,68,68,0.15)]' :
             'bg-yellow-500/10 border-yellow-500/30 hover:bg-yellow-500/20 hover:border-yellow-500/50 shadow-[0_0_15px_-3px_rgba(234,179,8,0.15)]';
@@ -48,6 +48,20 @@ export function FeedbackCard({ item }: { item: FeedbackItem }) {
                     </Badge>
                     <span className="text-sm text-muted-foreground">{formatDate(item.created_at)}</span>
                 </div>
+                {onDelete && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Are you sure you want to delete this review?')) {
+                                onDelete(item.id);
+                            }
+                        }}
+                        className="text-muted-foreground hover:text-red-500 transition-colors p-1 rounded-md hover:bg-red-500/10"
+                        title="Delete Review"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                )}
             </CardHeader>
             <CardContent className="space-y-6">
                 <div>

@@ -42,3 +42,16 @@ def read_feedback(
 ):
     feedbacks = db.query(Feedback).order_by(Feedback.created_at.desc()).offset(skip).limit(limit).all()
     return feedbacks
+
+@router.delete("/{id}", response_model=FeedbackResponse)
+def delete_feedback(
+    *,
+    db: Session = Depends(get_db),
+    id: int,
+):
+    feedback = db.query(Feedback).filter(Feedback.id == id).first()
+    if not feedback:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    db.delete(feedback)
+    db.commit()
+    return feedback

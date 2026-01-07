@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getFeedbackList } from "@/lib/api";
+import { getFeedbackList, deleteFeedback } from "@/lib/api";
 import { FeedbackCard } from "@/components/FeedbackCard";
 import { Search, Filter, RefreshCw } from "lucide-react";
 
@@ -25,6 +25,16 @@ export default function AllReviewsPage() {
 
         fetchFeedbacks();
     }, []);
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteFeedback(id);
+            setFeedbacks(prev => prev.filter(f => f.id !== id));
+        } catch (error) {
+            console.error("Failed to delete review", error);
+            alert("Failed to delete review. Please try again.");
+        }
+    };
 
     const filteredFeedbacks = feedbacks.filter(f => {
         const matchesRating = filterRating ? f.rating === filterRating : true;
@@ -87,7 +97,7 @@ export default function AllReviewsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
                     {filteredFeedbacks.length > 0 ? (
                         filteredFeedbacks.map((item) => (
-                            <FeedbackCard key={item.id} item={item} />
+                            <FeedbackCard key={item.id} item={item} onDelete={handleDelete} />
                         ))
                     ) : (
                         !isLoading && (
